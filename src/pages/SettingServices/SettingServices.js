@@ -24,7 +24,7 @@ const SettingServices = () => {
   };
 
   const onEditClick = useCallback((data) => {
-    console.log(data, 'data from services edit click');
+    console.log(data, 'dataonEditClick');
     formRef.current?.setEdit(data);
   }, []);
 
@@ -40,7 +40,7 @@ const SettingServices = () => {
       ...data,
       parent_id: data.parant_id === 0 ? null : data.parent_id,
     };
-    return dispath(createCategory(data)).unwrap();
+    return dispath(createCategory(categoryData)).unwrap();
   }, []);
 
   useEffect(() => {
@@ -70,12 +70,17 @@ const SettingServices = () => {
       />
       <FormModal
         ref={formRef}
+        titleEdit={PAGE_SERVICES.label}
         title={PAGE_SERVICES.label}
         onEdit={onEdit}
         onSubmit={onSubmit}
       >
         {(isEditing) => (
-          <ServicesForm isEditing={isEditing} data={categories} />
+          <ServicesForm
+            isEditing={isEditing}
+            data={categories}
+            onEditClick={onEditClick}
+          />
         )}
       </FormModal>
     </>
