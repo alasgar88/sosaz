@@ -1,0 +1,9 @@
+.category_container {
+  display: flex;
+  gap: 20px 20px;
+  flex-wrap: wrap;
+}
+.category_container .category-element {
+  width: 30%;
+  padding: 10px;
+}/*# sourceMappingURL=category.module.css.map */

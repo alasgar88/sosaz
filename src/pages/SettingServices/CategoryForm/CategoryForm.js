@@ -6,11 +6,7 @@ import {
   setSingleCategoryStatus,
 } from '../../../features/services/servicesSlice';
 
-import {
-  REQUIRED_FIELD_FILE,
-  REQUIRED_FIELD_EMAIL_RULES,
-  SETTING_USER_OPTIONS,
-} from '../../../utils/forms';
+import { REQUIRED_FIELD_FILE } from '../../../utils/forms';
 import { useDispatch, useSelector } from 'react-redux';
 
 const { Item } = Form;
@@ -21,6 +17,12 @@ const ServicesForm = ({ isEditing, data, onEditClick }) => {
   const { singleCategory, isLoading, singleCategoryStatus } = useSelector(
     (store) => store.services
   );
+
+  console.log(singleCategoryStatus, 'singleCategoryStatus');
+  const treeSelectData = [
+    { key: 0, value: 0, title: 'Əsas kateqoriya' },
+    ...data,
+  ];
 
   const handleChange = (e) => {
     if (e === 0) {
@@ -36,11 +38,6 @@ const ServicesForm = ({ isEditing, data, onEditClick }) => {
           onEditClick(data);
         });
   };
-
-  const treeSelectData = [
-    { key: 0, value: 0, title: 'Əsas kateqoriya' },
-    ...data,
-  ];
 
   return (
     <>
@@ -64,6 +61,10 @@ const ServicesForm = ({ isEditing, data, onEditClick }) => {
               name='parent_id'
             >
               <TreeSelect
+                showSearch
+                treeNodeFilterProp='title'
+                allowClear
+                treeDefaultExpandAll
                 treeData={isEditing ? data : treeSelectData}
                 onChange={(e) => handleChange(e)}
                 placeholder='Kateqoriya daxil edin'

@@ -2,6 +2,7 @@ import { forwardRef, useCallback, useImperativeHandle, useState } from 'react';
 import { Form, Modal as AntModal } from 'antd';
 import ConfirmModal from './ConfirmModal';
 import { FORM_CANCEL, FORM_CONFIRM } from '../../../utils/forms';
+import { useDispatch } from 'react-redux';
 
 const FormModal = (
   { title, titleEdit, onSubmit, children, onEdit, onCloseClick },
@@ -13,18 +14,20 @@ const FormModal = (
   const [isVisible, setIsVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
-  console.log('render');
 
   const closeModal = () => {
     if (form.isFieldsTouched()) {
+      onCloseClick && onCloseClick();
       return setConfirmModal(true);
     }
+    onCloseClick && onCloseClick();
     return setIsVisible(false);
   };
 
   const onFinalCancel = useCallback(() => {
     form.resetFields();
     setIsVisible(false);
+    onCloseClick && onCloseClick();
   }, [form]);
 
   useImperativeHandle(ref, () => ({
@@ -34,8 +37,9 @@ const FormModal = (
       form.resetFields();
     },
     close: () => {
+      setIsEditing(false);
       closeModal();
-      // onCloseClick();
+      onCloseClick();
     },
     setEdit: (data) => {
       setIsVisible(true);

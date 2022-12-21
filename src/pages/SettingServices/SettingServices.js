@@ -1,13 +1,20 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 import { Tabs } from 'antd';
 import PageHeading from '../../components/lib/PageHeading';
 import PageButton from '../../components/lib/PageButton';
 import { PAGE_SERVICES } from '../../utils/navigation';
 import Category from './Category';
+import Packages from './Packages';
+import PackagesForm from './PackagesForm';
 import { getAllCategories } from '../../features/services/servicesSlice';
+import {
+  getAllPackages,
+  createPackage,
+  updatePackage,
+} from '../../features/packages/packagesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import FormModal from '../../components/lib/FormModal';
-import ServicesForm from './Form';
+import ServicesForm from './CategoryForm';
 import {
   createCategory,
   setSingleCategoryStatus,
@@ -17,44 +24,64 @@ import { AiFillEdit } from '../../utils/icons';
 
 const SettingServices = () => {
   const dispatch = useDispatch();
+  const [tabKey, setTabKey] = useState(1);
   const { categories } = useSelector((store) => store.services);
+  const { packages, singlePackageId } = useSelector((store) => store.packages);
   const formRef = useRef();
-
-  // const detailRef = useRef(null);
-
-  // const { users, totalUser, singleUser } = useSelector((store) => store.user);
+  console.log(tabKey, 'tabkey');
+  console.log(packages, 'packages');
 
   const onAddClick = useCallback(() => {
     formRef.current?.open();
-  }, []);
+  }, [tabKey]);
 
   const onEditClick = useCallback((data) => {
     formRef.current?.setEdit(data);
   }, []);
 
-  const onCloseClick = useCallback(() => {
+  const onCloseClick = () => {
     formRef.current?.resetFormField();
     dispatch(setSingleCategoryStatus());
-  }, []);
+  };
 
-  const onEdit = useCallback((data) => {
-    console.log(data, 'data onEdit');
-    const categoryData = { ...data, photo: 'test' };
-    return dispatch(updateCategory(categoryData)).unwrap();
-  }, []);
+  const onEdit = useCallback(
+    (data) => {
+      const categoryData = { ...data, photo: 'test' };
+      console.log(categoryData, 'clean categry data');
+      if (tabKey === '1') {
+        return dispatch(updateCategory(categoryData)).unwrap();
+      } else {
+        let servicesOption = categoryData.services;
+        if (categoryData.services[0] instanceof Object) {
+          servicesOption = categoryData.services.map((item) => item.id);
+        }
+
+        return dispatch(
+          updatePackage({
+            id: singlePackageId,
+            data: { ...categoryData, services: servicesOption },
+          })
+        ).unwrap();
+      }
+    },
+    [singlePackageId, tabKey, dispatch]
+  );
 
   const onSubmit = (data) => {
-    const categoryData = {
-      ...data,
-      parent_id: data.parant_id === 0 ? null : data.parent_id,
-      photo: 'test photo',
-    };
-    return dispatch(createCategory(categoryData)).unwrap();
+    if (tabKey === '1') {
+      const categoryData = {
+        ...data,
+        photo: 'test photo',
+      };
+      return dispatch(createCategory(categoryData)).unwrap();
+    } else {
+      return dispatch(createPackage(data)).unwrap();
+    }
   };
 
   useEffect(() => {
-    dispatch(getAllCategories());
-  }, []);
+    tabKey === 1 ? dispatch(getAllCategories()) : dispatch(getAllPackages());
+  }, [tabKey]);
 
   return (
     <>
@@ -63,17 +90,19 @@ const SettingServices = () => {
           className='button-container'
           style={{ width: '50px', display: 'flex', gap: '0 5px' }}
         >
-          <PageButton onAddClick={onAddClick} title={PAGE_SERVICES.label} />
-          <PageButton
-            onAddClick={onEditClick}
-            title='Kateqoriya'
-            // icon={<AiFillEdit />}
-          />
+          <PageButton funtionProp={onAddClick} title={PAGE_SERVICES.label} />
+          {tabKey === '1' && (
+            <PageButton
+              funtionProp={onEditClick}
+              title='Kateqoriya'
+              icon={<AiFillEdit />}
+            />
+          )}
         </div>
       </PageHeading>
       <Tabs
         defaultActiveKey='1'
-        // onChange={onChange}
+        onChange={(e) => setTabKey(e)}
         items={[
           {
             label: `Kateqoriyalar`,
@@ -83,7 +112,7 @@ const SettingServices = () => {
           {
             label: `Paketlər`,
             key: '2',
-            children: 'category element',
+            children: <Packages data={packages} onEditClick={onEditClick} />,
           },
         ]}
       />
@@ -95,13 +124,20 @@ const SettingServices = () => {
         onSubmit={onSubmit}
         onCloseClick={onCloseClick}
       >
-        {(isEditing) => (
-          <ServicesForm
-            isEditing={isEditing}
-            data={categories}
-            onEditClick={onEditClick}
-          />
-        )}
+        {tabKey === '1'
+          ? (isEditing) => (
+              <ServicesForm
+                isEditing={isEditing}
+                data={categories}
+                onEditClick={onEditClick}
+              />
+            )
+          : (isEditing) => (
+              <PackagesForm
+                isEditing={isEditing}
+                // data={categories}
+              />
+            )}
       </FormModal>
     </>
   );

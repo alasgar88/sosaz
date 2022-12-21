@@ -1,0 +1,45 @@
+.personDetailContainer {
+  display: flex;
+  align-items: center;
+  gap: 0px 30px;
+  padding: 15px 30px;
+  background: white;
+  margin: 20px 0;
+  border-radius: 5px;
+}
+.personDetailContainer .detailRow {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.personDetailContainer .detailField {
+  width: 220px;
+  padding: 5px 10px;
+  background: #fff9f9;
+  font-size: 22;
+  border-radius: 5px;
+}
+.personDetailContainer .detailField .fieldValue {
+  color: rgb(123, 118, 118);
+}
+
+@media screen and (max-width: 992px) {
+  .personDetailContainer {
+    align-items: flex-start;
+    gap: 0px 30px;
+  }
+  .personDetailContainer .detailField {
+    width: calc(50% - 30px);
+  }
+}
+@media screen and (max-width: 755px) {
+  .personDetailContainer {
+    align-items: flex-start;
+    gap: 0px 30px;
+  }
+  .personDetailContainer .detailField {
+    width: 100%;
+  }
+}/*# sourceMappingURL=person-detail.module.css.map */

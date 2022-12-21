@@ -1,0 +1,22 @@
+.packages_container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 20px;
+  width: 100%;
+  justify-content: center;
+  align-content: flex-start;
+}
+
+.package {
+  width: 250px;
+}
+
+.package_body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px 10px;
+}
+
+.package_name {
+  display: block;
+}/*# sourceMappingURL=packages.module.css.map */

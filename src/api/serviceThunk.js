@@ -58,7 +58,7 @@ export const updateCategoryThunk = async (payload, thunkAPI) => {
   console.log(payload, 'servis data');
   const { parent_id, ...rest } = payload;
   try {
-    const resp = await customFetch.post(`/admin/services/${parent_id}`, rest);
+    const resp = await customFetch.put(`/admin/services/${parent_id}`, rest);
     thunkAPI.dispatch(getAllCategories());
     return resp.data;
   } catch (error) {
