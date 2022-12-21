@@ -81,7 +81,7 @@ export const REQUIRED_INPUT_MASK = [
 export const SETTING_USER_OPTIONS = [
   {
     key: 0,
-    value: '0',
+    value: 0,
     label: 'Admin',
   },
   { key: 1, value: '1', label: 'Moderator' },

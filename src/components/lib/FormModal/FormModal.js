@@ -3,21 +3,24 @@ import { Form, Modal as AntModal } from 'antd';
 import ConfirmModal from './ConfirmModal';
 import { FORM_CANCEL, FORM_CONFIRM } from '../../../utils/forms';
 
-const FormModal = ({ title, titleEdit, onSubmit, children, onEdit }, ref) => {
+const FormModal = (
+  { title, titleEdit, onSubmit, children, onEdit, onCloseClick },
+  ref
+) => {
   const { useForm } = Form;
   const [form] = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
   const [confirmModal, setConfirmModal] = useState(false);
+  console.log('render');
 
-  const closeModal = useCallback(() => {
+  const closeModal = () => {
     if (form.isFieldsTouched()) {
       return setConfirmModal(true);
     }
     return setIsVisible(false);
-  }, [form]);
+  };
 
   const onFinalCancel = useCallback(() => {
     form.resetFields();
@@ -32,6 +35,7 @@ const FormModal = ({ title, titleEdit, onSubmit, children, onEdit }, ref) => {
     },
     close: () => {
       closeModal();
+      // onCloseClick();
     },
     setEdit: (data) => {
       setIsVisible(true);
@@ -41,6 +45,9 @@ const FormModal = ({ title, titleEdit, onSubmit, children, onEdit }, ref) => {
     isEditing: () => {
       return isEditing;
     },
+    resetFormField: () => {
+      form.resetFields();
+    },
   }));
 
   const onFormSubmit = useCallback(() => {
@@ -48,15 +55,16 @@ const FormModal = ({ title, titleEdit, onSubmit, children, onEdit }, ref) => {
     console.log(data, 'datafrom from');
 
     setIsLoading(true);
-
     if (isEditing && onEdit !== undefined) {
       setIsLoading(true);
+      console.log(data, 'data from formdal');
       onEdit(data)
         .then(() => setIsLoading(true))
         .catch((error) => console.log(error))
         .finally(() => setIsLoading(false));
     } else {
       setIsLoading(true);
+
       onSubmit(data)
         .then(() => {
           form.resetFields();
@@ -65,35 +73,7 @@ const FormModal = ({ title, titleEdit, onSubmit, children, onEdit }, ref) => {
         .catch((error) => console.log(error))
         .finally(() => setIsLoading(false));
     }
-
-    // const promiseToBe =
-    //   isEditing && onEdit !== undefined
-    //     ? onEdit(form.getFieldValue('id'), data)
-    //     : onSubmit(data);
-
-    // promiseToBe
-    //   .then(() => {
-    //     form.resetFields();
-    //     setConfirmModal(false);
-    //     setIsVisible(false);
-    //   })
-    //   .catch((e) => {
-    // if (e.errors !== undefined) {
-    //   const ktf = e.errors
-    //   const res = Object.entries(ktf)
-    //     .filter(([, value]) => value !== undefined)
-    //     .map(([key, value]) => ({
-    //       name: key,
-    //       errors: value,
-    //     }))
-    //   form.setFields(res)
-    //   form.scrollToField(res[0]?.name)
-    // }
-    // })
-    // .finally(() => {
-    //   setIsLoading(false);
-    // });
-  }, [form, isEditing, onEdit, onSubmit]);
+  }, [form, onEdit, onSubmit]);
 
   return (
     <>
@@ -103,6 +83,7 @@ const FormModal = ({ title, titleEdit, onSubmit, children, onEdit }, ref) => {
         confirmModal={confirmModal}
       />
       <AntModal
+        transitionName=''
         width={window.screen.width * 0.5}
         okText={FORM_CONFIRM}
         cancelText={FORM_CANCEL}
@@ -112,7 +93,7 @@ const FormModal = ({ title, titleEdit, onSubmit, children, onEdit }, ref) => {
         onCancel={closeModal}
         destroyOnClose={confirmModal}
         mask={true}
-        maskClosable={false}
+        maskClosable={true}
       >
         <Form
           disabled={isLoading}

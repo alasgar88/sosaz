@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Form, Input, Col, Row, TreeSelect, Spin, Button } from 'antd';
-import { getSingleCategory } from '../../../features/services/servicesSlice';
-import Spinner from '../../../components/lib/Spinner';
+import {
+  getSingleCategory,
+  changeCategoryStatus,
+  setSingleCategoryStatus,
+} from '../../../features/services/servicesSlice';
 
 import {
   REQUIRED_FIELD_FILE,
@@ -15,7 +18,9 @@ const { Item } = Form;
 const ServicesForm = ({ isEditing, data, onEditClick }) => {
   const [isMainCategory, setIsMainCategory] = useState(false);
   const dispatch = useDispatch();
-  const { singleCategory, isLoading } = useSelector((store) => store.services);
+  const { singleCategory, isLoading, singleCategoryStatus } = useSelector(
+    (store) => store.services
+  );
 
   const handleChange = (e) => {
     if (e === 0) {
@@ -27,6 +32,7 @@ const ServicesForm = ({ isEditing, data, onEditClick }) => {
       dispatch(getSingleCategory({ id: e }))
         .unwrap()
         .then((data) => {
+          dispatch(setSingleCategoryStatus(data.status));
           onEditClick(data);
         });
   };
@@ -35,7 +41,6 @@ const ServicesForm = ({ isEditing, data, onEditClick }) => {
     { key: 0, value: 0, title: 'Əsas kateqoriya' },
     ...data,
   ];
-  console.log(singleCategory, 'singleCategory');
 
   return (
     <>
@@ -54,9 +59,7 @@ const ServicesForm = ({ isEditing, data, onEditClick }) => {
           <Col span={18}>
             <Form.Item
               label={`${
-                isEditing
-                  ? 'Redaktə etmək üçün kateqoriya seçin'
-                  : 'Əsas kateqoriya'
+                isEditing ? 'Redaktə etmək üçün kateqoriya seçin' : 'Kateqoriya'
               }`}
               name='parent_id'
             >
@@ -80,14 +83,30 @@ const ServicesForm = ({ isEditing, data, onEditClick }) => {
             >
               <Input placeholder='Sub kateqoriya daxil edin' />
             </Item>
-
             <Item name='price' label='Tarif'>
               <Input placeholder='Qiymət  daxil edin' />
             </Item>
             {isEditing && (
-              <Button danger style={{ marginTop: '15px' }} disabled={isLoading}>
-                Kateqoriyanı sil
-              </Button>
+              <>
+                {singleCategoryStatus && (
+                  <Button
+                    danger
+                    style={{ marginTop: '15px' }}
+                    disabled={isLoading}
+                    onClick={() =>
+                      dispatch(
+                        changeCategoryStatus({ id: singleCategoryStatus })
+                      )
+                    }
+                  >
+                    {`${
+                      singleCategoryStatus
+                        ? 'Kateqoriyanı deaktiv et'
+                        : 'Kateqoriyanı aktiv et'
+                    }`}
+                  </Button>
+                )}
+              </>
             )}
           </Col>
           <Col span={3}></Col>

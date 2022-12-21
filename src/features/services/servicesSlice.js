@@ -5,13 +5,15 @@ import {
   getAllCategoriesThunk,
   createCategoryThunk,
   getSingleCategoryThunk,
+  changeUserStatusThunk,
+  updateCategoryThunk,
 } from '../../api/serviceThunk';
 
 const initialState = {
   isLoading: false,
   categories: [],
   singleCategory: {},
-  singleCategoryChildren: [],
+  singleCategoryStatus: '',
 };
 
 export const getAllCategories = createAsyncThunk(
@@ -29,13 +31,23 @@ export const getSingleCategory = createAsyncThunk(
   getSingleCategoryThunk
 );
 
+export const changeCategoryStatus = createAsyncThunk(
+  'services/changeCategoryStatus',
+  changeUserStatusThunk
+);
+
+export const updateCategory = createAsyncThunk(
+  'services/updateCategory',
+  updateCategoryThunk
+);
+
 const servicesSlice = createSlice({
   name: 'services',
   initialState,
   reducers: {
-    // setUserDetail: (state, { payload }) => {
-    //   state.singleUser = state.users.find((user) => user.id === payload);
-    // },
+    setSingleCategoryStatus: (state, { payload }) => {
+      state.singleCategoryStatus = payload;
+    },
   },
   extraReducers: {
     [getAllCategories.pending]: (state) => {
@@ -54,6 +66,7 @@ const servicesSlice = createSlice({
     },
     [createCategory.fulfilled]: (state, action) => {
       state.isLoading = false;
+      toast.success('Kateqoriya yaradıldı');
     },
     [createCategory.rejected]: (state, { payload }) => {
       state.isLoading = false;
@@ -66,15 +79,37 @@ const servicesSlice = createSlice({
       state.isLoading = false;
       const { id, name, price } = payload;
       state.singleCategory = { key: id, value: id, title: name, price };
+      state.singleCategoryStatus = payload.status;
     },
     [getSingleCategory.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+      toast.error(payload);
+    },
+    [changeCategoryStatus.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [changeCategoryStatus.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      toast.success('Status dəyişdirildi');
+    },
+    [changeCategoryStatus.rejected]: (state, { payload }) => {
+      state.isLoading = false;
+      toast.error(payload);
+    },
+    [updateCategory.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [updateCategory.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      toast.success('Kateqoriya məlumatları yeniləndi');
+    },
+    [updateCategory.rejected]: (state, { payload }) => {
       state.isLoading = false;
       toast.error(payload);
     },
   },
 });
 
-// export const { logoutUser } =
-//   userSlice.actions;
+export const { setSingleCategoryStatus } = servicesSlice.actions;
 
 export default servicesSlice.reducer;

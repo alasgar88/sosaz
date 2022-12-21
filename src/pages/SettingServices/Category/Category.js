@@ -20,12 +20,6 @@ const Category = ({ data, onEditClick }, ref) => {
               bordered={false}
               style={{ width: 300 }}
               key={index}
-              extra={
-                <AiFillEdit
-                  onClick={() => onEditClick(category)}
-                  style={{ cursor: 'pointer' }}
-                />
-              }
             >
               <Tree
                 showLine
