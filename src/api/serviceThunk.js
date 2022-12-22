@@ -25,6 +25,7 @@ export const createCategoryThunk = async (category, thunkAPI) => {
 };
 
 // get single category
+// single test commit
 export const getSingleCategoryThunk = async ({ id }, thunkAPI) => {
   try {
     const resp = await customFetch.get(`/admin/services/${id}`);
