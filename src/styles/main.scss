@@ -1,55 +1,55 @@
 $main-color: purple;
-$sidebar-button: purple;
-$select-color: purple;
+$sidebar-button: #b64dff;
+$select-color: #b64dff;
 *{
     margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+   padding: 0;
+   box-sizing: border-box;
 }
 .ant-form-item {
-    margin-bottom: 5px !important;
+   margin-bottom: 5px !important;
 }
 
 body {
-    overflow-x: hidden !important;
+   overflow-x: hidden !important;
 }
 
 td.ant-table-cell {
-    padding: 10px 16px !important;
-    white-space: nowrap !important;
+   padding: 10px 16px !important;
+   white-space: nowrap !important;
 }
 
 .ant-pagination {
-    margin-bottom: 0;
+   margin-bottom: 0;
 }
 
 .ant-input-number {
-    width: 100% !important;
+   width: 100% !important;
 }
 
 .ant-layout-sider-trigger {
-    background: $sidebar-button;
+   background: $sidebar-button !important;
 }
 
 .ant-layout-sider-children {
-    background: $main-color  !important;
-    max-width: 200px;
+   background: $main-color  !important;
+   max-width: 200px;
 }
 
 .ant-menu-submenu-arrow,
 .ant-menu,
 .ant-menu-item {
-    background: $main-color  !important;
-    color: #ffffff;
-    width: auto;
+   background: $main-color  !important;
+   color: #ffffff;
+   width: auto;
 }
 
 .ant-menu-item {
-    width: auto !important;
+   width: auto !important;
 }
 
 .ant-menu-item a {
-    color: #fff;
+   color: #fff;
 }
 
 .ant-menu-submenu-arrow:hover,
@@ -59,40 +59,80 @@ td.ant-table-cell {
 .ant-menu-item i:hover,
 .ant-menu-item-selected:hover,
 .ant-menu-item-selected a:hover {
-    color: white !important;
+   color: white !important;
 
 }
 
 .ant-menu-submenu-arrow::before {
-    color: white;
+   color: white;
 }
 
 .ant-menu-submenu-arrow::after {
-    color: white;
+   color: white;
 }
 
+.ant-menu-submenu .ant-menu-submenu-inline .ant-menu-submenu-selected,
 .ant-menu-item-selected {
-    background: $select-color  !important;
-    width: auto !important;
+   background: $select-color  !important;
+   width: auto !important;
 
+}
+.ant-menu-title-content{
+   color: white;
+}
+.ant-menu-submenu-selected{
+   background-color: $select-color;
+}
+.ant-menu-submenu-open{
+   background-color: $main-color;
 }
 
 .ant-menu-submenu-selected,
 .ant-menu-submenu-active {
-    color: white !important;
+   color: white !important;
 }
 
 .ant-layout-header {
-    background: $main-color  !important;
+   background: $main-color  !important;
 }
 
 .ant-picker {
-    width: 100%;
+   width: 100%;
 }
 
 .ql-toolbar.ql-snow+.ql-container.ql-snow {
-    height: 150px !important;
+   height: 150px !important;
 }
+.ant-layout .ant-layout-sider{
+   background: $main-color;
+   
+}
+.ant-menu-inline.ant-menu-root{
+   overflow: auto;
+   height: 530px !important;
+   background-color: white;
+}
+::-webkit-scrollbar {
+   width: 10px;
+ }
+ 
+ /* Track */
+ ::-webkit-scrollbar-track {
+   box-shadow: inset 0 0 5px grey;
+   border-radius: 10px;
+ }
+ 
+ /* Handle */
+ ::-webkit-scrollbar-thumb {
+   background: $select-color;
+   border-radius: 10px;
+ }
+ 
+ /* Handle on hover */
+ ::-webkit-scrollbar-thumb:hover {
+   background: #9400D3;
+ }
+
 
 h1,
 h2,
@@ -101,5 +141,5 @@ h4,
 h5,
 h6,
 p {
-    margin: 0;
+   margin: 0;
 }
